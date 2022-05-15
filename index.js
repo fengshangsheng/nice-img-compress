@@ -1,3 +1,74 @@
+const fs = require('fs');
+const path = require("path");
+const https = require('https');
+const url = require('url');
+// const ora = require('ora')
+// const chalk = require('chalk');
+
+const download = require('./src/download')
+const upload = require('./src/upload')
+
+class CompressImgPlugin {
+  compilation = null;
+  compiler = null;
+
+  constructor() {
+  }
+
+  apply(compiler) {
+    compiler.hooks.afterEmit.tap('CompressImgPlugin', (compilation, cb) => {
+      this.compilation = compilation;
+      this.compiler = compiler;
+
+      this.init();
+    })
+  }
+
+  async init() {
+    const imgPath = this.getAssetsImgPath(this.compilation.assets);
+    const pormise = [];
+
+    imgPath.forEach((item) => {
+      const absolutePath = path.join(this.compiler.outputPath, item);
+      pormise.push(this.initCompress(absolutePath));
+    });
+
+    Promise.allSettled(pormise).then((data) => {
+      console.log('压缩完成',data);
+    });
+  }
+
+  // 开始压缩
+  async initCompress(absolutePath) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const beforeFile = fs.readFileSync(absolutePath, "binary");
+        const uploadData = await upload(beforeFile);
+        const afterFile = await download(uploadData.output.url);
+        fs.writeFileSync(absolutePath, afterFile, "binary");
+        console.log(`${parseInt(uploadData.input.size / 1024)}kb ==> ${parseInt(uploadData.output.size / 1024)}px`);
+        resolve()
+      } catch (e) {
+        reject();
+      }
+    })
+  }
+
+  getAssetsImgPath(assets) {
+    return Object.entries(assets)
+      .filter((item) => {
+        return /(.png|.jpg)$/.test(item[0]);
+      })
+      .map((item) => item[0])
+  }
+}
+
+module.exports = CompressImgPlugin;
+
+
+
+
+/*
 import Fs from 'fs';
 import Path from 'path';
 import Chalk from 'chalk';
@@ -103,17 +174,4 @@ function downloadImg(url) {
   // spinner.stop();
   // console.log('res', res);
 })();
-
-
-function CompressImgPlugin() {
-}
-
-CompressImgPlugin.prototype.apply = function(compiler) {
-  // 指定一个挂载到 webpack 自身的事件钩子。
-  compiler.plugin('webpacksEventHook', function(compilation /* 处理 webpack 内部实例的特定数据。*/, callback) {
-    console.log("This is an example plugin!!!");
-
-    // 功能完成后调用 webpack 提供的回调。
-    callback();
-  });
-}
+*/

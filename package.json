@@ -1,21 +1,27 @@
 {
   "name": "webpack-plu",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.0.1",
+  "description": "图片压缩插件",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "webpack"
   },
   "type": "module",
   "keywords": [],
   "author": "fengshangsheng",
   "license": "ISC",
   "dependencies": {
-    "chalk": "^5.0.1",
+    "clean-webpack-plugin": "^4.0.0",
     "figures": "^4.0.1",
     "imagemin": "^8.0.1",
     "imagemin-jpegtran": "^7.0.0",
     "imagemin-pngquant": "^9.0.2",
-    "ora": "^6.1.0"
+    "ora": "^6.1.0",
+    "webpack": "^5.72.1",
+    "webpack-cli": "^4.9.2",
+    "chalk": "^5.0.1",
+    "file-loader": "^6.2.0"
+  },
+  "devDependencies": {
   }
 }
