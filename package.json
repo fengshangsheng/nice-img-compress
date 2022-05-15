@@ -1,6 +1,6 @@
 {
-  "name": "img-compress",
-  "version": "0.0.2",
+  "name": "nicetoolfn-img-compress",
+  "version": "0.0.5",
   "description": "图片压缩插件",
   "main": "index.js",
   "scripts": {},

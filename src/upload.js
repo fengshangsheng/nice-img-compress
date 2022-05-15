@@ -1,4 +1,5 @@
-import https from 'https';
+// import https from 'https';
+const https = require("https");
 
 const domainUrl = ["tinyjpg.com", "tinypng.com"];
 
@@ -48,3 +49,4 @@ function index(file) {
 }
 
 module.exports = index
+// export default index
