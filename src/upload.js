@@ -1,5 +1,4 @@
-const fs = require("fs");
-const https = require("https");
+import https from 'https';
 
 const domainUrl = ["tinyjpg.com", "tinypng.com"];
 

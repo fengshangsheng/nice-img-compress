@@ -1,7 +1,9 @@
-const fs = require('fs');
-const path = require("path");
-const https = require('https');
-const url = require('url');
+import fs from 'fs';
+import ora from 'ora';
+import path from 'path';
+import chalk from 'chalk';
+// const fs = require('fs');
+// const path = require("path");
 // const ora = require('ora')
 // const chalk = require('chalk');
 
