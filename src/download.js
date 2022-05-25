@@ -1,7 +1,5 @@
 const url = require("url");
-// import url from 'url';
 const https = require("https");
-// import https from 'https';
 
 function index(path) {
   const options = new url.URL(path);

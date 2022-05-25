@@ -2,6 +2,8 @@ const fs = require('fs');
 const path = require("path");
 const download = require('./src/download')
 const upload = require('./src/upload')
+const byteTransform = require('./src/uitls/byteTransform');
+const color = require('./src/uitls/chalk')
 
 class CompressImgPlugin {
   compilation = null;
@@ -29,7 +31,8 @@ class CompressImgPlugin {
     });
 
     Promise.allSettled(pormise).then((data) => {
-      console.log('压缩完成');
+      const msg = color.success('压缩完成');
+      console.log(msg);
     });
   }
 
@@ -41,7 +44,12 @@ class CompressImgPlugin {
         const uploadData = await upload(beforeFile);
         const afterFile = await download(uploadData.output.url);
         fs.writeFileSync(absolutePath, afterFile, "binary");
-        console.log(`${absolutePath}:${parseInt(uploadData.input.size / 1024)}kb ==> ${parseInt(uploadData.output.size / 1024)}px`);
+
+        const before = color.warn(byteTransform(uploadData.input.size));
+        const after = color.success(byteTransform(uploadData.output.size));
+
+        console.log(`${absolutePath}: ${before} => ${after}`);
+
         resolve()
       } catch (e) {
         reject();
@@ -55,10 +63,10 @@ class CompressImgPlugin {
         return path.parse(item[0]);
       })
       .filter((item) => {
-        const {name,ext,base} = item;
+        const {name, ext, base} = item;
         return /^(.png|.jpg)/.test(ext)
       })
-      .map((item)=>{
+      .map((item) => {
         return path.join(item.dir, item.base).split('?')[0]
       })
 
